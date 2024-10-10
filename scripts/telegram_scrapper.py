@@ -41,3 +41,5 @@ async def gather_channel_data(telegram_client, channel_handle, csv_writer, image
     
     except Exception as err:
         scraper_logger.error(f"Failed to scrape {channel_handle}: {err}")
+
+telegram_client = TelegramClient('scraper_session', telegram_api_id, telegram_api_hash)
