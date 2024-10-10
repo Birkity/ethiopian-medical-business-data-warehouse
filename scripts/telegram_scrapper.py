@@ -16,3 +16,28 @@ logging.basicConfig(
     filemode='a'  
 )
 scraper_logger = logging.getLogger()
+
+async def gather_channel_data(telegram_client, channel_handle, csv_writer, image_dir):
+    try:
+        channel_entity = await telegram_client.get_entity(channel_handle)
+        channel_name = channel_entity.title  
+        scraper_logger.info(f"Gathering data from: {channel_name} ({channel_handle})")
+        
+        message_count = 0  
+        async for post in telegram_client.iter_messages(channel_entity, limit=10000):
+            media_filepath = None
+            if post.media and hasattr(post.media, 'photo'):
+                
+                img_filename = f"{channel_handle}_{post.id}.jpg"
+                media_filepath = os.path.join(image_dir, img_filename)
+                
+                await telegram_client.download_media(post.media, media_filepath)
+                scraper_logger.info(f"Image saved from message {post.id} at {media_filepath}")
+            
+            csv_writer.writerow([channel_name, channel_handle, post.id, post.message, post.date, media_filepath])
+            message_count += 1
+
+        scraper_logger.info(f"Scraped {message_count} messages from {channel_handle}")
+    
+    except Exception as err:
+        scraper_logger.error(f"Failed to scrape {channel_handle}: {err}")
