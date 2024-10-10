@@ -70,3 +70,6 @@ async def run_scraping():
             scraper_logger.info(f"Data collection completed for {channel}")
 
     scraper_logger.info("Scraping completed for all listed channels")
+
+with telegram_client:
+    telegram_client.loop.run_until_complete(run_scraping())
