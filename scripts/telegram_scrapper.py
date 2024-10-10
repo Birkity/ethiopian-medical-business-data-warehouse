@@ -43,3 +43,30 @@ async def gather_channel_data(telegram_client, channel_handle, csv_writer, image
         scraper_logger.error(f"Failed to scrape {channel_handle}: {err}")
 
 telegram_client = TelegramClient('scraper_session', telegram_api_id, telegram_api_hash)
+
+
+async def run_scraping():
+    await telegram_client.start()
+    
+    image_storage_dir = 'downloaded_images'
+    os.makedirs(image_storage_dir, exist_ok=True)
+    
+    with open('telegram_scraped_data.csv', 'w', newline='', encoding='utf-8') as output_file:
+        csv_writer = csv.writer(output_file)
+        csv_writer.writerow(['Channel Name', 'Channel Handle', 'Message ID', 'Message Text', 'Timestamp', 'Media Path'])  # Column headers
+        
+        target_channels = [
+            '@lobelia4cosmetics',
+            '@DoctorsET',
+            '@yetenaweg',
+            '@EAHCI',
+            '@CheMed123',
+            '@PHARMA39INFO'
+        ]
+        
+        for channel in target_channels:
+            scraper_logger.info(f"Initiating data collection for {channel}")
+            await gather_channel_data(telegram_client, channel, csv_writer, image_storage_dir)
+            scraper_logger.info(f"Data collection completed for {channel}")
+
+    scraper_logger.info("Scraping completed for all listed channels")
