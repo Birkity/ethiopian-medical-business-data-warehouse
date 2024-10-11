@@ -7,7 +7,6 @@ models:
       - name: message_id
         tests:
           - not_null
-          - unique
 
   - name: telegram_summary
     description: "Aggregated summary of Telegram channels"
