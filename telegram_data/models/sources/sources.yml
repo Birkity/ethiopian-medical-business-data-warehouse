@@ -1,8 +1,7 @@
-version: 2
-
 sources:
   - name: Telegram_data
     database: Telegram_data
     schema: public
     tables:
       - name: transformed_telegram_data
+        identifier: transformed_telegram_data

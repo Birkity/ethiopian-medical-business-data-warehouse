@@ -1,12 +1,10 @@
-
-
-with base as (
-    select 
-        channel_name,
-        count(message_id) as total_messages,
-        max(timestamp) as latest_message
-    from {{ ref('transformed_telegram_data') }}
-    group by channel_name
+WITH transformed_data AS (
+    SELECT * FROM {{ ref('select_all') }}
 )
 
-select * from base;
+SELECT
+    channel_name,
+    COUNT(message_id) AS total_messages,
+    MAX(timestamp) AS latest_message
+FROM transformed_data
+GROUP BY channel_name

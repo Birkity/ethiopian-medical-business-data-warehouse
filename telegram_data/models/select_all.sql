@@ -1,7 +1,5 @@
-
-
-with source_data as (
-    select 
+WITH source_data AS (
+    SELECT 
         channel_name,
         channel_handle,
         message_id,
@@ -9,7 +7,15 @@ with source_data as (
         timestamp,
         media_path,
         header_text
-    from {{ source('Telegram_data', 'transformed_telegram_data') }}
+    FROM {{ source('Telegram_data', 'transformed_telegram_data') }}
 )
 
-select * from source_data;
+SELECT 
+    channel_name,
+    channel_handle,
+    message_id,
+    message_text,
+    timestamp,
+    media_path,
+    header_text
+FROM source_data
