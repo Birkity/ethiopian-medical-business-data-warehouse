@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: select_all
+    description: "Ingested data from Telegram"
+    columns:
+      - name: message_id
+        tests:
+          - not_null
+
+  - name: telegram_summary
+    description: "Aggregated summary of Telegram channels"
+    columns:
+      - name: channel_name
+        tests:
+          - not_null
