@@ -2,3 +2,7 @@ myenv/
 myenv
 .env
 .vscode/
+scripts/downloaded_images/
+scraper_session.session
+telegram_scraped_data.csv
+data/
