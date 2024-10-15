@@ -36,14 +36,12 @@ def create_table(table_name):
         # SQL query to create the table
         create_table_query = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
-            id SERIAL PRIMARY KEY,
-            channel_name VARCHAR(255),
-            channel_handle VARCHAR(255),
-            message_id BIGINT,
-            message_text TEXT,
-            timestamp TIMESTAMPTZ,
-            media_path VARCHAR(255),
-            header_text VARCHAR(255)
+            name VARCHAR(255),
+            confidence DOUBLE PRECISION,
+            xmin_x DOUBLE PRECISION,
+            ymin_y DOUBLE PRECISION,
+            xmax_x DOUBLE PRECISION,
+            ymax_y DOUBLE PRECISION 
         );
         """
         
@@ -81,7 +79,7 @@ def import_csv_to_postgres(csv_file_path, table_name):
         df = pd.read_csv(csv_file_path, encoding='utf-8')
 
         # Ensure DataFrame column names match the table columns
-        df.columns = ['channel_name', 'channel_handle', 'message_id', 'message_text', 'timestamp', 'media_path', 'header_text']
+        df.columns = ['name','confidence','xmin_x','ymin_y','xmax_x','ymax_y']
         
         # Create SQLAlchemy engine to facilitate DataFrame to SQL
         engine = create_engine(f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}')
@@ -99,8 +97,8 @@ def import_csv_to_postgres(csv_file_path, table_name):
             connection.close()
 
 # Set function parameters
-csv_file_path = r'C:\Users\USER\Documents\OPLearning\10_Academy\Week_7\data\transformed_telegram_data.csv'
-table_name = 'transformed_telegram_data'
+csv_file_path = r'C:\Users\USER\Documents\OPLearning\10_Academy\Week_7\data\merged_detections.csv'
+table_name = 'images'
 
 # Create the table and import CSV data
 create_table(table_name)
